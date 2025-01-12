@@ -1,0 +1,63 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class OnlineExaminationSystem {
+    private static Map<String, String> users = new HashMap<>();
+    private static Map<Integer, String> questions = new HashMap<>();
+    private static Map<Integer, String> answers = new HashMap<>();
+
+    public static void main(String[] args) {
+        // Initialize users (username, password)
+        users.put("student1", "password1");
+        users.put("student2", "password2");
+
+        // Initialize questions and answers
+        questions.put(1, "What is the capital of France?");
+        answers.put(1, "Paris");
+        questions.put(2, "What is 2 + 2?");
+        answers.put(2, "4");
+        questions.put(3, "What is the largest planet in our solar system?");
+        answers.put(3, "Jupiter");
+
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Welcome to the Online Examination System");
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        if (authenticateUser(username, password)) {
+            System.out.println("Authentication successful. Starting the exam...");
+            startExam(scanner);
+        } else {
+            System.out.println("Invalid username or password. Exiting the system.");
+        }
+
+        scanner.close();
+    }
+
+    private static boolean authenticateUser(String username, String password) {
+        return users.containsKey(username) && users.get(username).equals(password);
+    }
+
+    private static void startExam(Scanner scanner) {
+        int score = 0;
+
+        for (Map.Entry<Integer, String> entry : questions.entrySet()) {
+            System.out.println("Question " + entry.getKey() + ": " + entry.getValue());
+            System.out.print("Your answer: ");
+            String answer = scanner.nextLine();
+
+            if (answer.equalsIgnoreCase(answers.get(entry.getKey()))) {
+                score++;
+                System.out.println("Correct!");
+            } else {
+                System.out.println("Incorrect. The correct answer is " + answers.get(entry.getKey()));
+            }
+        }
+
+        System.out.println("Exam finished. Your score is: " + score + "/" + questions.size());
+    }
+}
